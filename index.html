@@ -1023,7 +1023,19 @@
       }
     }
   .atelier-logo{display:block;max-width:min(560px,100%);width:480px;max-height:160px;object-fit:contain;object-position:left center;margin:6px 0 10px} .photo-upload,.collab-panel{background:#fffaf2;border:1px solid #dfd0bc;border-radius:12px;padding:22px;display:grid;gap:12px;margin:14px 0}.photo-upload input[type=file]{max-width:100%;font-size:.9rem}.uploaded-preview img{display:block;width:auto;max-width:100%;max-height:340px;border-radius:8px;margin:10px 0}.collab-panel select{background:white;padding:12px;border:1px solid #dfd0bc;border-radius:8px;width:100%;font-size:1rem}.collab-panel textarea{width:100%}.handwrite{border-left-color:#1d6356}.game-footer .btn-emerald{margin-left:auto}.photo-plate{aspect-ratio:740/415}.masthead{gap:0}@media(max-width:600px){.atelier-logo{max-height:115px}.collab-panel,.photo-upload{padding:14px}}
-  </style>
+  
+/* Administration : compacte, réservée à l'animateur */
+#mv-admin[hidden]{display:none!important}
+#mv-admin h4{margin:.5rem 0 0;font-size:1rem}
+.mv-admin-list{display:grid;gap:.65rem}
+.mv-admin-entry{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,200px) auto;align-items:center;gap:.65rem;background:#fff;border:1px solid #e7d8c8;border-radius:8px;padding:.75rem}
+.mv-admin-entry small{display:block;color:#41506b;overflow-wrap:anywhere}
+.mv-admin-entry input{width:100%;max-width:200px;padding:.5rem!important}
+.mv-admin-entry .btn-row{gap:.35rem}
+.mv-admin-entry .btn{min-height:36px;padding:.35rem .7rem;font-size:.84rem}
+@media(max-width:780px){.mv-admin-entry{grid-template-columns:1fr}.mv-admin-entry input{max-width:100%}}
+
+</style>
 <style>
 .mv-online{background:#fffaf2;border:1px solid #cdb9a2;border-radius:12px;padding:22px;margin:20px 0;display:grid;gap:12px}.mv-online h3{font-family:var(--font-headline);font-size:1.5rem;margin:0}.mv-online label{font-weight:600}.mv-online input{width:100%;max-width:520px;border:1px solid #d1c2b4;padding:11px;border-radius:6px}.mv-online .mv-status{color:#41506b;white-space:pre-line}.mv-online .mv-post{background:#fff;border:1px solid #e7d8c8;border-radius:8px;padding:13px;white-space:pre-wrap;overflow-wrap:anywhere}.mv-online .mv-post strong{display:block;color:#162238}.mv-online .mv-footnote{font-size:.86rem;color:#41506b}.mv-online[hidden],.mv-authenticated[hidden],.mv-pending[hidden]{display:none!important}
 /* Les Mots Vagabonds : espace de connexion compact */
@@ -1217,6 +1229,18 @@
 <div id="mv-authenticated" class="mv-authenticated" hidden><p id="mv-identity"></p><button type="button" class="btn btn-secondary" id="mv-logout">Me déconnecter</button></div>
 <p id="mv-auth-message" class="mv-status" role="status" aria-live="polite">Connexion à l'espace commun…</p>
 <p class="mv-footnote">Les comptes doivent être validés par l'animateur avant de pouvoir voir ou publier des textes. Ne partagez jamais votre mot de passe.</p>
+</section>
+
+<section class="mv-online" id="mv-admin" hidden aria-label="Administration des Mots Vagabonds">
+  <h3>Administration de l'atelier</h3>
+  <p class="field-hint">Réservé à l'animateur · Validez les inscriptions et gérez les noms affichés dans la bibliothèque.</p>
+  <div class="btn-row"><button type="button" class="btn btn-secondary" id="mv-admin-refresh">Actualiser les inscriptions</button></div>
+  <h4>Demandes d'inscription</h4>
+  <div id="mv-admin-pending" class="mv-admin-list"></div>
+  <h4>Participants autorisés</h4>
+  <div id="mv-admin-members" class="mv-admin-list"></div>
+  <p id="mv-admin-status" class="mv-status" role="status" aria-live="polite"></p>
+  <p class="mv-footnote">Refuser une inscription masque la demande sans effacer le compte. Aucun e-mail n'est envoyé automatiquement : prévenez la personne après validation.</p>
 </section>
           <div class="ornament-rule" aria-hidden="true">◆ Les 6 escales d'écriture ◆</div>
 
@@ -3244,6 +3268,70 @@ async function reveal(){if(!chosen||!confirm('Dévoiler cette histoire maintenan
 function init(){if(!window.supabase?.createClient)return info('Impossible de charger Supabase.');client=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 get('mv-story-select').addEventListener('change',displayStory);get('mv-story-refresh').addEventListener('click',()=>refresh());get('mv-start-story').addEventListener('click',start);get('mv-pass-story').addEventListener('click',pass);get('mv-reveal-now').addEventListener('click',reveal);
 client.auth.onAuthStateChange(()=>setTimeout(()=>refresh(),0));refresh();}
+document.addEventListener('DOMContentLoaded',init);
+})();
+</script>
+<script>
+/* Espace animateur : les cinq RPC contrôlent le rôle sur le serveur Supabase. */
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const el = (tag, cls, value) => {const node=document.createElement(tag);if(cls)node.className=cls;if(value!==undefined)node.textContent=value;return node;};
+const URL='https://vmojqrdzwextxcuscvim.supabase.co';
+const KEY='sb_publishable_9js-CCs_aMSJ2cCvZvtzJg_nsLEZ9oA';
+let client=null, facilitator=false, busy=false;
+const info=t=>{$('mv-admin-status').textContent=t||'';};
+function button(label, action, secondary=false){const b=el('button','btn '+(secondary?'btn-secondary':'btn-primary'),label);b.type='button';b.addEventListener('click',action);return b;}
+function entryIdentity(name,email){const box=el('div');box.append(el('strong','',name),el('small','',email));return box;}
+async function rpc(method,args={}){const {data,error}=await client.rpc(method,args);if(error)throw error;return data;}
+async function refresh(){
+ if(!facilitator||busy)return;
+ info('Chargement des inscriptions…');
+ try{
+  const [pending,members]=await Promise.all([rpc('mv_admin_pending'),rpc('mv_admin_members')]);
+  const p=$('mv-admin-pending'),m=$('mv-admin-members');p.replaceChildren();m.replaceChildren();
+  if(!pending.length)p.append(el('p','field-hint','Aucune inscription en attente.'));
+  for(const request of pending){
+    const row=el('div','mv-admin-entry');const name=el('input');name.type='text';name.maxLength=60;name.placeholder='Prénom ou nom de plume';name.setAttribute('aria-label','Nom du participant '+request.email);
+    const actions=el('div','btn-row');
+    const approve=button('Accepter',async()=>{
+      const display=name.value.trim();if(!display)return info('Saisissez le prénom ou le nom de plume.');
+      if(!request.email_confirmed)return info('Cette personne doit confirmer son adresse e-mail avant validation.');
+      await perform(async()=>rpc('mv_admin_approve',{p_user:request.user_id,p_display_name:display}),'Participant autorisé. Prévenez-le qu’il peut actualiser le site.');
+    });
+    const refuse=button('Refuser',async()=>{
+      if(!confirm('Refuser cette demande ? Elle disparaîtra des demandes en attente.'))return;
+      await perform(async()=>rpc('mv_admin_refuse',{p_user:request.user_id}),'Demande refusée.');
+    },true);
+    actions.append(approve,refuse);
+    row.append(entryIdentity(request.email_confirmed?'Adresse confirmée':'Adresse non confirmée',request.email),name,actions);p.append(row);
+  }
+  for(const member of members){
+    const row=el('div','mv-admin-entry');const name=el('input');name.type='text';name.maxLength=60;name.value=member.display_name;name.setAttribute('aria-label','Nom de plume de '+member.email);
+    const actions=el('div','btn-row');actions.append(button('Enregistrer',()=>perform(async()=>rpc('mv_admin_rename',{p_user:member.user_id,p_display_name:name.value.trim()}),'Nom mis à jour.'),true));
+    row.append(entryIdentity(member.is_facilitator?'Animateur':'Participant',member.email),name,actions);m.append(row);
+  }
+  info(pending.length+' demande(s) en attente · '+members.length+' membre(s) autorisé(s).');
+ }catch(e){info('Erreur : '+(e.message||e));}
+}
+async function perform(action,success){if(busy)return;busy=true;info('Enregistrement…');try{await action();busy=false;await refresh();info(success);}catch(e){busy=false;info('Erreur : '+(e.message||e));}}
+async function check(){
+ if(!client)return;
+ const {data,error}=await client.auth.getUser();if(error){$('mv-admin').hidden=true;return;}
+ const user=data?.user;
+ if(!user){facilitator=false;$('mv-admin').hidden=true;return;}
+ const result=await client.from('atelier_members').select('is_facilitator').eq('user_id',user.id).maybeSingle();
+ facilitator=!result.error&&result.data?.is_facilitator===true;
+ $('mv-admin').hidden=!facilitator;
+ if(facilitator)await refresh();
+}
+function init(){
+ if(!window.supabase?.createClient)return;
+ client=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ $('mv-admin-refresh').addEventListener('click',refresh);
+ client.auth.onAuthStateChange(()=>setTimeout(()=>check().catch(e=>info('Erreur : '+e.message)),0));
+ check().catch(e=>info('Erreur : '+e.message));
+}
 document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
