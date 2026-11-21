@@ -1024,6 +1024,9 @@
     }
   .atelier-logo{display:block;max-width:min(560px,100%);width:480px;max-height:160px;object-fit:contain;object-position:left center;margin:6px 0 10px} .photo-upload,.collab-panel{background:#fffaf2;border:1px solid #dfd0bc;border-radius:12px;padding:22px;display:grid;gap:12px;margin:14px 0}.photo-upload input[type=file]{max-width:100%;font-size:.9rem}.uploaded-preview img{display:block;width:auto;max-width:100%;max-height:340px;border-radius:8px;margin:10px 0}.collab-panel select{background:white;padding:12px;border:1px solid #dfd0bc;border-radius:8px;width:100%;font-size:1rem}.collab-panel textarea{width:100%}.handwrite{border-left-color:#1d6356}.game-footer .btn-emerald{margin-left:auto}.photo-plate{aspect-ratio:740/415}.masthead{gap:0}@media(max-width:600px){.atelier-logo{max-height:115px}.collab-panel,.photo-upload{padding:14px}}
   </style>
+<style>
+.mv-online{background:#fffaf2;border:1px solid #cdb9a2;border-radius:12px;padding:22px;margin:20px 0;display:grid;gap:12px}.mv-online h3{font-family:var(--font-headline);font-size:1.5rem;margin:0}.mv-online label{font-weight:600}.mv-online input{width:100%;max-width:520px;border:1px solid #d1c2b4;padding:11px;border-radius:6px}.mv-online .mv-status{color:#41506b;white-space:pre-line}.mv-online .mv-post{background:#fff;border:1px solid #e7d8c8;border-radius:8px;padding:13px;white-space:pre-wrap;overflow-wrap:anywhere}.mv-online .mv-post strong{display:block;color:#162238}.mv-online .mv-footnote{font-size:.86rem;color:#41506b}.mv-online[hidden],.mv-authenticated[hidden],.mv-pending[hidden]{display:none!important}
+</style>
 </head>
 <body>
   <div class="app-shell">
@@ -1103,37 +1106,10 @@
             </p>
           </div>
 
-          
-<div class="prompt-callout handwrite">
-  <h3 class="sub-title">
-    D’abord, un stylo et du papier
-  </h3>
-
-  <p>
-    Pour chaque jeu, commencez par écrire
-    <strong>à la main</strong>, sur une feuille
-    ou dans votre carnet.
-
-    Ensuite, photographiez votre texte et ajoutez
-    la photo dans le jeu correspondant.
-
-    La saisie au clavier reste facultative.
-  </p>
-
-  <p class="field-hint">
-    L’écriture manuscrite sollicite les gestes fins,
-    la perception et l’attention.
-
-    Des recherches ont observé des différences
-    d’activité cérébrale et, dans certains contextes
-    d’apprentissage, des bénéfices pour la mémorisation.
-
-    Cela ne prouve pas qu’elle soit toujours supérieure
-    pour écrire une fiction : choisissez surtout la
-    méthode qui libère votre créativité.
-  </p>
+          <div class="prompt-callout handwrite"><h3 class="sub-title">D’abord, un stylo et du papier</h3>
+<p>Pour chaque jeu, commencez par écrire <strong>à la main</strong>, sur une feuille ou dans votre carnet. Ensuite, photographiez votre texte et ajoutez la photo dans le jeu correspondant. La saisie au clavier reste facultative.</p>
+<p class="field-hint">L’écriture manuscrite sollicite les gestes fins, la perception et l’attention. Des recherches ont observé des différences d’activité cérébrale et, dans certains contextes d’apprentissage, des bénéfices pour la mémorisation. Cela ne prouve pas qu’elle soit toujours supérieure pour écrire une fiction : choisissez surtout la méthode qui libère votre créativité.</p>
 </div>
-
           <div class="two-col">
             <div class="prompt-callout">
               <h3 class="sub-title">L'esprit de la séance</h3>
@@ -1152,6 +1128,18 @@
             </div>
           </div>
 
+          <section class="mv-online" id="mv-account" aria-label="Compte participant — espace partagé">
+<h3>Mon espace Les Mots Vagabonds</h3>
+<p>Connectez-vous pour publier un texte dans la bibliothèque commune. L'écriture des six jeux reste accessible sans compte sur cet appareil.</p>
+<div id="mv-auth-form">
+<label for="mv-email">Adresse e-mail</label><input id="mv-email" type="email" autocomplete="email" placeholder="monadresse@exemple.fr">
+<label for="mv-password">Mot de passe personnel</label><input id="mv-password" type="password" autocomplete="current-password" placeholder="Au moins 8 caractères">
+<div class="btn-row"><button type="button" class="btn btn-primary" id="mv-login">Me connecter</button><button type="button" class="btn btn-secondary" id="mv-signup">Créer mon compte</button></div>
+</div>
+<div id="mv-authenticated" class="mv-authenticated" hidden><p id="mv-identity"></p><button type="button" class="btn btn-secondary" id="mv-logout">Me déconnecter</button></div>
+<p id="mv-auth-message" class="mv-status" role="status" aria-live="polite">Connexion à l'espace commun…</p>
+<p class="mv-footnote">Les comptes doivent être validés par l'animateur avant de pouvoir voir ou publier des textes. Ne partagez jamais votre mot de passe.</p>
+</section>
           <div class="ornament-rule" aria-hidden="true">◆ Les 6 escales d'écriture ◆</div>
 
           <div class="card-grid" id="home-cards">
@@ -1786,7 +1774,20 @@
 
           <div class="prompt-callout"><span class="kicker">Notre prochain rendez-vous</span><p class="prompt-quote">Jeudi 3 décembre 2026 à 18 h</p><p class="prompt-caption">Nous travaillerons à partir d’<strong>images de tempête</strong> : sensations, décors, atmosphères et descriptions.</p></div>
 
-          <div class="collab-panel"><h3 class="sub-title">Le coin des textes et des mots libres</h3><p>Un endroit convivial pour déposer un texte de la semaine dernière, une idée, une découverte ou simplement quelques mots à partager.</p><label class="field-label" for="community-text">Mon message ou mon texte</label><textarea id="community-text" class="tall-area" oninput="saveCommunity()" placeholder="Aujourd'hui j'ai envie de partager…"></textarea><div class="btn-row"><button type="button" class="btn btn-primary" onclick="shareCommunityEmail()">Partager par e-mail</button><button type="button" class="btn btn-secondary" onclick="copyCommunity()">Copier mon texte</button></div><p class="field-hint">Le partage se fait avec votre accord et ouvre votre messagerie. Une galerie commune visible par tout le groupe nécessitera un espace en ligne avec publication et modération.</p></div>
+          <div class="collab-panel"><h3 class="sub-title">Le coin des textes et des mots libres</h3><p>Un endroit convivial pour déposer un texte de la semaine dernière, une idée, une découverte ou simplement quelques mots à partager.</p><label class="field-label" for="community-text">Mon message ou mon texte</label><textarea id="community-text" class="tall-area" oninput="saveCommunity()" placeholder="Aujourd'hui j'ai envie de partager…"></textarea><div class="btn-row"><button type="button" class="btn btn-primary" onclick="prepareCommunityPublication()">Préparer ma publication dans la bibliothèque</button><button type="button" class="btn btn-secondary" onclick="copyCommunity()">Copier mon texte</button></div><p class="field-hint">La publication dans la bibliothèque requiert un compte validé. Aucun texte n’est partagé automatiquement.</p></div>
+<section class="mv-online" id="mv-library" aria-label="Bibliothèque collective">
+<h3>Bibliothèque du groupe</h3>
+<p>Choisissez librement un texte que vous souhaitez partager. Rien de votre carnet personnel n'est publié automatiquement.</p>
+<div id="mv-library-locked" class="mv-status">Connectez-vous et attendez la validation de votre participation pour utiliser cet espace.</div>
+<div id="mv-library-open" hidden>
+<label for="mv-text-title">Titre du texte</label><input id="mv-text-title" maxlength="120" placeholder="Le titre de mon texte">
+<label for="mv-text-body">Texte à publier</label><textarea id="mv-text-body" class="tall-area" maxlength="30000" placeholder="Collez votre texte ici, si vous souhaitez le partager avec le groupe…"></textarea>
+<div class="btn-row"><button type="button" class="btn btn-primary" id="mv-publish">Publier dans la bibliothèque</button><button type="button" class="btn btn-secondary" id="mv-refresh">Actualiser les textes</button></div>
+<p class="mv-footnote">La publication rend le texte visible uniquement aux membres autorisés. Vous pouvez supprimer vos propres textes depuis la liste.</p>
+<div id="mv-library-list" aria-live="polite"></div>
+</div>
+<p class="mv-status" id="mv-library-message" role="status" aria-live="polite"></p>
+</section>
           <div class="game-footer">
             <button type="button" class="btn btn-secondary" onclick="navigateTo('jeu6')">Retour au Jeu 6</button>
             <button type="button" class="btn btn-secondary" onclick="navigateTo('accueil')">Revenir à l'accueil</button>
@@ -3054,12 +3055,45 @@ function relayMessage(){saveCollab();const c=extras.collab;return 'Les Mots Vaga
 function sendCadavreRelay(){const c=extras.collab;saveCollab();if(!c.last.trim()){alert('Écrivez votre deuxième phrase avant de préparer le mail.');return;}const url='mailto:'+encodeURIComponent(c.contact||'')+'?subject='+encodeURIComponent('Les Mots Vagabonds — relais cadavre exquis')+'&body='+encodeURIComponent(relayMessage());window.location.href=url;}
 async function copyText(s){try{await navigator.clipboard.writeText(s);alert('Texte copié.');}catch(e){const t=document.createElement('textarea');t.value=s;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();alert('Texte copié.');}}
 function copyCadavreRelay(){copyText(relayMessage())}function copyCollabStory(){saveCollab();copyText(extras.collab.story||extras.collab.incoming||'')}
+function prepareCommunityPublication(){saveCommunity();const target=document.getElementById('mv-text-body');if(!target){alert('Espace de publication indisponible.');return;}target.value=extras.community||'';document.getElementById('mv-library').scrollIntoView({behavior:'smooth'});target.focus();}
 function saveCommunity(){extras.community=document.getElementById('community-text').value;storeExtras();}
 function copyCommunity(){saveCommunity();copyText(extras.community)}
 function shareCommunityEmail(){saveCommunity();if(!extras.community.trim()){alert('Écrivez un texte à partager avant de continuer.');return;}const r=extras.contacts.map(c=>c.email).join(',');window.location.href='mailto:?bcc='+encodeURIComponent(r)+'&subject='+encodeURIComponent('Les Mots Vagabonds — un texte à partager')+'&body='+encodeURIComponent(extras.community);}
 function renderWritingPhoto(n){const host=document.getElementById('writing-photo-'+n);if(!host)return;host.replaceChildren();const url=extras.photos[n];if(url){const img=document.createElement('img');img.src=url;img.alt='Photographie de mon texte manuscrit, jeu '+n;host.appendChild(img);const p=document.createElement('p');p.className='field-hint';p.textContent='Photo conservée dans ce navigateur. Pensez à l’exporter pour la retrouver sur un autre appareil.';host.appendChild(p);}}
 function attachWritingPhoto(n,file){if(!file)return;if(!file.type.startsWith('image/')){alert('Choisissez une photographie.');return;}const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{const scale=Math.min(1,1500/img.width,1500/img.height);const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));const ctx=canvas.getContext('2d');ctx.fillStyle='#ffffff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);extras.photos[n]=canvas.toDataURL('image/jpeg',.76);storeExtras();renderWritingPhoto(n);};img.src=reader.result;};reader.readAsDataURL(file);}
 function downloadWritingPhoto(n){const src=extras.photos[n];if(!src){alert('Ajoutez d’abord une photo.');return;}const a=document.createElement('a');a.href=src;a.download='mots-vagabonds-jeu-'+n+'-manuscrit.jpg';document.body.appendChild(a);a.click();a.remove();}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+/* Les Mots Vagabonds — connexion publique Supabase. Ne JAMAIS ajouter de clé secret/service_role. */
+(() => {
+'use strict';
+const PROJECT_URL = 'https://vmojqrdzwextxcuscvim.supabase.co';
+const PUBLIC_KEY = 'sb_publishable_9js-CCs_aMSJ2cCvZvtzJg_nsLEZ9oA';
+const SITE_URL = 'https://fabiensanlaville69-del.github.io/les-mots-vagabonds/';
+const $ = id => document.getElementById(id);
+let client=null,member=null,user=null;
+function message(id,text){const el=$(id);if(el) el.textContent=text||'';}
+function el(tag,attrs={},value='') {const e=document.createElement(tag);for(const [k,v] of Object.entries(attrs)){if(k==='class')e.className=v;else e.setAttribute(k,v);}if(value)e.textContent=value;return e;}
+function errorText(e){if(!e)return '';if(/Invalid login credentials/i.test(e.message))return 'Identifiants incorrects. Vérifiez votre e-mail et votre mot de passe.';return e.message||'Erreur de connexion.';}
+async function updateUI(){
+ const s=(await client.auth.getUser());user=s.data?.user||null;member=null;
+ if(user){ const res=await client.from('atelier_members').select('user_id,display_name,is_facilitator').eq('user_id',user.id).maybeSingle(); if(res.error)message('mv-auth-message',errorText(res.error));else member=res.data; }
+ $('mv-auth-form').hidden=!!user; $('mv-authenticated').hidden=!user;
+ $('mv-identity').textContent=user ? 'Connecté : '+(member?.display_name||user.email):'';
+ $('mv-library-open').hidden=!member; $('mv-library-locked').hidden=!!member;
+ if(!user)message('mv-auth-message','Pour accéder à la bibliothèque, connectez-vous ou créez un compte.');
+ else if(!member)message('mv-auth-message','Compte connecté. Votre accès attend la validation de l’animateur.');
+ else {message('mv-auth-message','Accès au groupe activé.');await loadTexts();}
+}
+async function login(){const email=$('mv-email').value.trim(),password=$('mv-password').value;if(!email||!password)return message('mv-auth-message','Renseignez votre e-mail et votre mot de passe.');message('mv-auth-message','Connexion en cours…');try{const {error}=await client.auth.signInWithPassword({email,password});if(error)throw error;await updateUI()}catch(e){message('mv-auth-message',errorText(e))}}
+async function signup(){const email=$('mv-email').value.trim(),password=$('mv-password').value;if(!email||password.length<8)return message('mv-auth-message','Indiquez un e-mail et un mot de passe d’au moins 8 caractères.');message('mv-auth-message','Inscription en cours…');try{const {error}=await client.auth.signUp({email,password,options:{emailRedirectTo:SITE_URL}});if(error)throw error;message('mv-auth-message','Si cette adresse peut être inscrite, consultez votre messagerie pour confirmer le compte. Ensuite l’animateur devra autoriser l’accès à la bibliothèque.');}catch(e){message('mv-auth-message',errorText(e))}}
+async function loadTexts(){if(!member)return;const out=$('mv-library-list');out.replaceChildren();message('mv-library-message','Chargement des textes…');const {data,error}=await client.from('atelier_texts').select('id,title,content,author_id,created_at,is_shared').eq('is_shared',true).order('created_at',{ascending:false}).limit(100);if(error){message('mv-library-message',errorText(error));return}message('mv-library-message',data.length?`${data.length} texte(s) partagé(s).`:'Aucun texte publié pour le moment.');for(const t of data){const card=el('article',{class:'mv-post'});card.append(el('strong',{},t.title),el('small',{},new Date(t.created_at).toLocaleDateString('fr-FR')),el('p',{},t.content));if(t.author_id===user?.id){const b=el('button',{type:'button',class:'btn btn-secondary'},'Supprimer mon texte');b.addEventListener('click',()=>removeText(t.id));card.append(b)}out.append(card)}}
+async function publish(){if(!member)return;const title=$('mv-text-title').value.trim()||'Sans titre',content=$('mv-text-body').value.trim();if(!content)return message('mv-library-message','Ajoutez un texte avant de publier.');message('mv-library-message','Publication en cours…');const {error}=await client.from('atelier_texts').insert({author_id:user.id,title,content,is_shared:true});if(error)return message('mv-library-message',errorText(error));$('mv-text-title').value='';$('mv-text-body').value='';await loadTexts()}
+async function removeText(id){if(!member||!confirm('Supprimer ce texte de la bibliothèque ?'))return;const {error}=await client.from('atelier_texts').delete().eq('id',id).eq('author_id',user.id);if(error)return message('mv-library-message',errorText(error));await loadTexts()}
+async function init(){if(!window.supabase?.createClient){message('mv-auth-message','Impossible de charger Supabase. Vérifiez la connexion Internet.');return;}client=window.supabase.createClient(PROJECT_URL,PUBLIC_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});$('mv-login').addEventListener('click',login);$('mv-signup').addEventListener('click',signup);$('mv-logout').addEventListener('click',async()=>{await client.auth.signOut();await updateUI()});$('mv-publish').addEventListener('click',publish);$('mv-refresh').addEventListener('click',loadTexts);client.auth.onAuthStateChange(()=>setTimeout(()=>updateUI().catch(e=>message('mv-auth-message',errorText(e))),0));await updateUI()}
+document.addEventListener('DOMContentLoaded',()=>init().catch(e=>message('mv-auth-message',errorText(e))));
+})();
 </script>
 </body>
 </html>
