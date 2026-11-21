@@ -1094,6 +1094,17 @@
 }
 
 </style>
+<style>
+#mv-story-app{padding:20px;gap:14px}
+#mv-story-app .mv-story-box{padding:14px;border:1px solid var(--outline-variant);background:var(--background);border-radius:10px;display:grid;gap:12px}
+#mv-story-app .mv-story-box[hidden],#mv-story-app [hidden]{display:none!important}
+#mv-story-app label{display:block;margin:0 0 4px}
+#mv-story-app input,#mv-story-app select,#mv-story-app textarea{max-width:none;width:100%;min-width:0;padding:9px 11px;border:1px solid var(--outline-variant);border-radius:6px;background:#fff;line-height:1.5}
+#mv-story-app textarea{min-height:95px}
+#mv-story-app .mv-story-page{background:#fff;border-left:3px solid var(--primary);padding:12px 16px;border-radius:6px;white-space:pre-wrap;margin-bottom:10px}
+#mv-story-app .mv-story-page small{display:block;color:var(--on-surface-variant);margin-bottom:6px}
+@media(max-width:600px){#mv-story-app{padding:14px}}
+</style>
 </head>
 <body>
   <div class="app-shell">
@@ -1526,21 +1537,37 @@
             </p>
           </div>
 
-          <div class="collab-panel"><h3 class="sub-title">Cadavre exquis collectif — échange réel par mail</h3>
-<p class="field-hint">Mode collaboratif : chacun rédige deux phrases. Il transmet au participant suivant <strong>uniquement la dernière phrase</strong> pour qu’il continue sans connaître le début. À la fin, les textes complets sont réunis. Vous pouvez utiliser la démonstration guidée plus bas si personne n’est disponible.</p>
-<div class="two-col"><div class="field-group"><label class="field-label" for="collab-from">Votre prénom</label><input id="collab-from" type="text" placeholder="Votre prénom" oninput="saveCollab()"></div><div class="field-group"><label class="field-label" for="collab-email">Votre adresse mail (facultatif)</label><input id="collab-email" type="text" placeholder="prenom@exemple.fr" oninput="saveCollab()"></div></div>
-<div class="field-group"><label class="field-label" for="collab-contact">Destinataire du relais</label><select id="collab-contact" onchange="saveCollab()"></select></div>
-<div class="two-col"><div class="field-group"><label class="field-label" for="collab-first">Ma première phrase (à garder cachée)</label><textarea id="collab-first" class="short-area" oninput="saveCollab()" placeholder="La première phrase de votre contribution…"></textarea></div><div class="field-group"><label class="field-label" for="collab-last">Ma deuxième phrase (à transmettre)</label><textarea id="collab-last" class="short-area" oninput="saveCollab()" placeholder="La phrase que la personne suivante pourra lire…"></textarea></div></div>
-<div class="btn-row"><button class="btn btn-primary" type="button" onclick="sendCadavreRelay()">Préparer le mail au participant suivant</button><button class="btn btn-secondary" type="button" onclick="copyCadavreRelay()">Copier le message</button></div>
-<p class="field-hint">Le bouton prépare un e-mail dans votre logiciel de messagerie : vérifiez le destinataire et cliquez sur Envoyer. Si rien ne s’ouvre, utilisez « Copier le message ». Le site n’envoie ni ne reçoit automatiquement les mails.</p>
-<hr style="width:100%;border:0;border-top:1px solid #dfd0bc"><h3 class="sub-title">J’ai reçu un relais : je continue</h3>
-<p class="field-hint">Collez ci-dessous la ou les phrases reçues par mail, puis écrivez vos deux nouvelles phrases au-dessus. Pour préserver l’effet de surprise, évitez de lire les phrases cachées des tours précédents avant la restitution.</p>
-<label class="field-label" for="collab-incoming">Phrase(s) reçue(s) des autres</label><textarea id="collab-incoming" class="short-area" oninput="saveCollab()" placeholder="Copiez ici la dernière phrase reçue par e-mail…"></textarea>
-<label class="field-label" for="collab-story">Assemblage collectif (facultatif, en fin de jeu)</label><textarea id="collab-story" class="tall-area" oninput="saveCollab()" placeholder="Rassemblez ici les passages complets envoyés par les participants…"></textarea>
-<div class="btn-row"><button class="btn btn-secondary" type="button" onclick="copyCollabStory()">Copier le texte collectif</button><button class="btn btn-secondary" type="button" onclick="addCollaborator()">Ajouter un participant</button></div>
-<div class="field-group"><label class="field-label" for="collab-new-name">Nouveau prénom</label><input id="collab-new-name" placeholder="Prénom"></div>
-<div class="field-group"><label class="field-label" for="collab-new-email">Nouvelle adresse e-mail</label><input id="collab-new-email" placeholder="adresse@exemple.fr"></div>
-<p class="field-hint">Les contacts sont enregistrés sur cet appareil uniquement. Les réponses par mail devront être collées manuellement pour être visibles dans ce carnet.</p></div><details class="example-drawer"><summary>Ou jouer seul : démonstration avec relais fictifs</summary><div id="jeu4-workspace"></div></details>
+          <section class="mv-online mv-story-app" id="mv-story-app" aria-label="Cadavre exquis collaboratif">
+<h3>Le cadavre exquis — en direct sur le site</h3>
+<p class="field-hint">Pas d’e-mail à envoyer : connectez-vous avec votre compte des Mots Vagabonds. Chacun écrit deux phrases. La personne suivante ne voit que la deuxième. L’histoire entière est dévoilée après le dernier tour.</p>
+<p class="mv-status" id="mv-story-status" role="status">Chargement de l’espace collectif…</p>
+<div id="mv-story-content" hidden>
+<div class="field-group"><label class="field-label" for="mv-story-select">Histoires du groupe</label><select id="mv-story-select"><option value="">Créer une nouvelle histoire</option></select></div>
+<div class="mv-story-box" id="mv-story-create">
+<h3 class="sub-title">Commencer une histoire</h3>
+<div class="field-group"><label for="mv-new-title">Titre de travail</label><input id="mv-new-title" maxlength="120" placeholder="Une histoire à inventer…"></div>
+<div class="field-group"><label for="mv-first">Première phrase (secrète)</label><textarea id="mv-first" class="short-area" maxlength="1000" placeholder="Votre première phrase…"></textarea></div>
+<div class="field-group"><label for="mv-second">Deuxième phrase (sera montrée au suivant)</label><textarea id="mv-second" class="short-area" maxlength="1000" placeholder="Votre deuxième phrase…"></textarea></div>
+<div class="two-col"><div class="field-group"><label for="mv-next">Transmettre à</label><select id="mv-next"></select></div><div class="field-group"><label for="mv-turn-limit">Nombre de contributeurs (vous compris)</label><select id="mv-turn-limit"><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="10">10</option><option value="12">12</option></select></div></div>
+<button type="button" id="mv-start-story" class="btn btn-primary">Créer et transmettre sur le site</button>
+</div>
+<div class="mv-story-box" id="mv-story-detail" hidden>
+<h3 id="mv-story-heading" class="sub-title">Histoire</h3><p id="mv-story-info" class="field-hint"></p>
+<div id="mv-story-turn" hidden>
+<div class="prompt-callout"><span class="kicker">Dernière phrase reçue</span><p id="mv-story-clue" class="prompt-quote"></p></div>
+<div class="field-group"><label for="mv-cont-first">Votre première phrase</label><textarea id="mv-cont-first" class="short-area" maxlength="1000"></textarea></div>
+<div class="field-group"><label for="mv-cont-second">Votre deuxième phrase, à transmettre</label><textarea id="mv-cont-second" class="short-area" maxlength="1000"></textarea></div>
+<div class="field-group" id="mv-next-wrap"><label for="mv-cont-next">Participant suivant</label><select id="mv-cont-next"></select></div>
+<button type="button" class="btn btn-primary" id="mv-pass-story">Valider mon passage</button>
+</div>
+<div id="mv-story-reveal" hidden><h3 class="sub-title">L’histoire dévoilée</h3><div id="mv-story-pages"></div></div>
+<div id="mv-story-facilitator" hidden><button type="button" class="btn btn-secondary" id="mv-reveal-now">Animateur : dévoiler cette histoire</button><p class="field-hint">À utiliser si le groupe décide d’arrêter le jeu avant le dernier tour.</p></div>
+</div>
+<div class="btn-row"><button type="button" class="btn btn-secondary" id="mv-story-refresh">Actualiser les relais</button></div>
+<p class="field-hint">Les nouveaux relais apparaissent lorsque vous actualisez. Un participant ajouté à la base Supabase sera automatiquement proposé dans la liste.</p>
+</div>
+</section>
+<details class="example-drawer"><summary>Ou jouer seul : démonstration avec relais fictifs</summary><div id="jeu4-workspace"></div></details>
 
           <div class="photo-upload"><strong>Mon texte manuscrit · Jeu 4</strong><p class="field-hint">Prenez votre texte en photo : il sera conservé ici, sans avoir à le retaper. Une photo par jeu ; la dernière remplace la précédente.</p><input aria-label="Photo de mon texte pour le jeu 4" type="file" accept="image/*" capture="environment" onchange="attachWritingPhoto(4,this.files[0])"><div id="writing-photo-4" class="uploaded-preview"></div><button type="button" class="btn btn-secondary" onclick="downloadWritingPhoto(4)">Enregistrer cette photo</button></div>
           <div class="game-footer">
@@ -3168,6 +3195,56 @@ async function publish(){if(!member)return;const title=$('mv-text-title').value.
 async function removeText(id){if(!member||!confirm('Supprimer ce texte de la bibliothèque ?'))return;const {error}=await client.from('atelier_texts').delete().eq('id',id).eq('author_id',user.id);if(error)return message('mv-library-message',errorText(error));await loadTexts()}
 async function init(){if(!window.supabase?.createClient){message('mv-auth-message','Impossible de charger Supabase. Vérifiez la connexion Internet.');return;}client=window.supabase.createClient(PROJECT_URL,PUBLIC_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});$('mv-login').addEventListener('click',login);$('mv-signup').addEventListener('click',signup);$('mv-logout').addEventListener('click',async()=>{await client.auth.signOut();await updateUI()});$('mv-publish').addEventListener('click',publish);$('mv-refresh').addEventListener('click',loadTexts);client.auth.onAuthStateChange(()=>setTimeout(()=>updateUI().catch(e=>message('mv-auth-message',errorText(e))),0));await updateUI()}
 document.addEventListener('DOMContentLoaded',()=>init().catch(e=>message('mv-auth-message',errorText(e))));
+})();
+</script>
+<script>
+/* Jeu 4 : échanges directs sécurisés par les fonctions RPC Supabase. */
+(() => {
+'use strict';
+const URL='https://vmojqrdzwextxcuscvim.supabase.co';
+const KEY='sb_publishable_9js-CCs_aMSJ2cCvZvtzJg_nsLEZ9oA';
+const get=id=>document.getElementById(id);
+const info=s=>{get('mv-story-status').textContent=s};
+let client=null,me=null,members=[],stories=[],chosen=null,isFacilitator=false;
+function option(value,text){const o=document.createElement('option');o.value=value;o.textContent=text;return o;}
+function setHidden(id,b){get(id).hidden=b;}
+function fillMembers(){for(const id of ['mv-next','mv-cont-next']){const sel=get(id);sel.replaceChildren(option('','Choisir un participant'));for(const m of members.filter(m=>m.user_id!==me.id))sel.append(option(m.user_id,m.display_name));}}
+function displayStory(){chosen=stories.find(s=>s.id===get('mv-story-select').value)||null;setHidden('mv-story-create',!!chosen);setHidden('mv-story-detail',!chosen);if(!chosen)return;
+get('mv-story-heading').textContent=chosen.title;
+get('mv-story-info').textContent=`${chosen.turn_count} / ${chosen.max_turns} contributions · ${chosen.is_revealed?'Histoire dévoilée':'En cours'}`;
+const turn=!chosen.is_revealed&&chosen.assigned_to===me.id;
+setHidden('mv-story-turn',!turn);setHidden('mv-story-reveal',!chosen.is_revealed);
+setHidden('mv-story-facilitator',!isFacilitator||chosen.is_revealed);
+if(turn){get('mv-story-clue').textContent=chosen.clue||'';setHidden('mv-next-wrap',chosen.turn_count+1>=chosen.max_turns)}
+if(chosen.is_revealed)loadRevealed(chosen.id);
+}
+async function loadRevealed(id){const {data,error}=await client.rpc('mv_revealed_passages',{p_story:id});if(error)return info(error.message);if(!chosen||chosen.id!==id)return;const out=get('mv-story-pages');out.replaceChildren();for(const p of (data||[])){const el=document.createElement('article');el.className='mv-story-page';const name=document.createElement('small');name.textContent=p.author_name;const t=document.createElement('div');t.textContent=p.content;el.append(name,t);out.append(el)}}
+async function refresh(keep=true){try{
+if(!client)return;const {data:u,error:ue}=await client.auth.getUser();if(ue)throw ue;me=u?.user||null;
+if(!me){setHidden('mv-story-content',true);return info('Connectez-vous dans « Mon espace Les Mots Vagabonds » sur l’accueil pour participer.')}
+const {data:my,error:myErr}=await client.from('atelier_members').select('user_id,is_facilitator').eq('user_id',me.id).maybeSingle();if(myErr)throw myErr;
+if(!my){setHidden('mv-story-content',true);return info('Votre compte doit d’abord être autorisé par l’animateur.')}
+isFacilitator=!!my.is_facilitator;
+const [{data:ms,error:em},{data:st,error:es}]=await Promise.all([
+client.from('atelier_members').select('user_id,display_name').order('display_name'),client.rpc('mv_list_stories')]);
+if(em)throw em;if(es)throw es;
+members=ms||[];stories=st||[];fillMembers();
+const select=get('mv-story-select'),prev=keep?select.value:'';select.replaceChildren(option('','Créer une nouvelle histoire'));
+for(const s of stories){const marker=s.is_revealed?'✓ Terminée':s.assigned_to===me.id?'✍ À vous':'En cours';select.append(option(s.id,`${s.title} — ${marker}`))}
+if(prev&&stories.some(s=>s.id===prev))select.value=prev;
+setHidden('mv-story-content',false);info('Espace collaboratif prêt. Les textes secrets restent invisibles aux autres participants.');displayStory();
+}catch(e){info('Erreur : '+(e.message||e))}}
+async function start(){const first=get('mv-first').value.trim(),second=get('mv-second').value.trim(),next=get('mv-next').value;
+if(!first||!second||!next)return info('Écrivez deux phrases et choisissez un destinataire.');
+get('mv-start-story').disabled=true;try{const {data,error}=await client.rpc('mv_start_story',{p_title:get('mv-new-title').value.trim(),p_first:first,p_second:second,p_next:next,p_max_turns:Number(get('mv-turn-limit').value)});if(error)throw error;await refresh(false);get('mv-story-select').value=data;displayStory();get('mv-first').value='';get('mv-second').value='';info('Histoire transmise ! Le participant suivant la retrouvera sur le site.')}catch(e){info('Erreur : '+e.message)}finally{get('mv-start-story').disabled=false}}
+async function pass(){if(!chosen)return;const first=get('mv-cont-first').value.trim(),second=get('mv-cont-second').value.trim();const next=get('mv-cont-next').value||null;
+if(!first||!second)return info('Écrivez vos deux phrases.');if(chosen.turn_count+1<chosen.max_turns&&!next)return info('Choisissez le participant suivant.');
+get('mv-pass-story').disabled=true;try{const {data,error}=await client.rpc('mv_pass_story',{p_story:chosen.id,p_first:first,p_second:second,p_next:next});if(error)throw error;get('mv-cont-first').value='';get('mv-cont-second').value='';await refresh();info(data?'L’histoire est terminée et dévoilée au groupe.':'Votre relais a été transmis au participant suivant.')}catch(e){info('Erreur : '+e.message)}finally{get('mv-pass-story').disabled=false}}
+async function reveal(){if(!chosen||!confirm('Dévoiler cette histoire maintenant à tout le groupe ?'))return;const {error}=await client.rpc('mv_facilitator_reveal',{p_story:chosen.id});if(error)return info('Erreur : '+error.message);await refresh()}
+function init(){if(!window.supabase?.createClient)return info('Impossible de charger Supabase.');client=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+get('mv-story-select').addEventListener('change',displayStory);get('mv-story-refresh').addEventListener('click',()=>refresh());get('mv-start-story').addEventListener('click',start);get('mv-pass-story').addEventListener('click',pass);get('mv-reveal-now').addEventListener('click',reveal);
+client.auth.onAuthStateChange(()=>setTimeout(()=>refresh(),0));refresh();}
+document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
 </body>
