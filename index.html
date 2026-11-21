@@ -1026,6 +1026,73 @@
   </style>
 <style>
 .mv-online{background:#fffaf2;border:1px solid #cdb9a2;border-radius:12px;padding:22px;margin:20px 0;display:grid;gap:12px}.mv-online h3{font-family:var(--font-headline);font-size:1.5rem;margin:0}.mv-online label{font-weight:600}.mv-online input{width:100%;max-width:520px;border:1px solid #d1c2b4;padding:11px;border-radius:6px}.mv-online .mv-status{color:#41506b;white-space:pre-line}.mv-online .mv-post{background:#fff;border:1px solid #e7d8c8;border-radius:8px;padding:13px;white-space:pre-wrap;overflow-wrap:anywhere}.mv-online .mv-post strong{display:block;color:#162238}.mv-online .mv-footnote{font-size:.86rem;color:#41506b}.mv-online[hidden],.mv-authenticated[hidden],.mv-pending[hidden]{display:none!important}
+/* Les Mots Vagabonds : espace de connexion compact */
+#mv-account {
+  width: 100%;
+  padding: 18px 22px;
+  margin: 12px 0;
+  gap: 8px;
+}
+#mv-account h3 {
+  font-size: 1.35rem;
+  line-height: 1.25;
+  margin: 0;
+}
+#mv-account > p {
+  margin: 0;
+  line-height: 1.45;
+  font-size: .88rem;
+}
+#mv-auth-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 5px;
+  width: min(100%, 420px);
+  margin: 3px 0 0;
+}
+#mv-auth-form label {
+  display: block;
+  width: 100%;
+  margin: 5px 0 0;
+  font-size: .85rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+#mv-auth-form input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  height: 42px;
+  min-height: 42px;
+  padding: 8px 11px;
+  margin: 0;
+  font-size: .9rem;
+}
+#mv-auth-form .btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 9px;
+}
+#mv-auth-form .btn {
+  min-height: 38px;
+  padding: 7px 15px;
+  font-size: .85rem;
+}
+#mv-account .mv-status {
+  min-height: 0;
+  font-size: .85rem;
+}
+#mv-account .mv-footnote {
+  font-size: .76rem;
+  line-height: 1.4;
+}
+@media (max-width: 540px) {
+  #mv-account { padding: 15px; }
+  #mv-auth-form { width: 100%; }
+}
+
 </style>
 </head>
 <body>
